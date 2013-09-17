@@ -15,7 +15,11 @@ injected as a dev-time setting.
 rawgithub
 ---------
 
-The page should be viewable on rawgithub soon - would be ideal to have a test suite running there too so we don't need
-the console open to see them pass.  Adding console support would also be nice.
+The test page is be viewable on 
+<a href='//rawgithub.com/dfkaye/context-bullpen/master/test.html' target='_new' title='opens in new tab or window'>
+  rawgithub</a>.
+  
+Should have a test suite running there too so we don't need the console open to see them pass.  
+Adding console support would also be nice.
 
 
