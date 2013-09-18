@@ -10,19 +10,23 @@
     
     var names = [];
     var values = [];
-    
+    var value;
     Object.keys(context).forEach(function(key, i, keys){
       names.push(key);
-      values.push(context[key]);
+      value = context[key];
+      values.push(typeof value != 'string' && value || "'" + value + "'");
     });
-    
+
+    console.log(values)
     typeof code == 'string' || (code = '(' + code.toString() + '())');
-    
-    code = '(function t(' + names.join(',') + '){' + code + '}(' + values.join(',') + '))';
-    
-    //var fn = Function(code);
-    
-    //console.log(fn.toString());
+  
+    code = '(function t(' + names.join(',') + '){\n' + code + '\n}(' + values.join(',') + '))';
+
+    console.log(code);
+   
+    var fn = Function(code);
+    fn()
+
     
   }
   
@@ -34,5 +38,6 @@
 
 vm.runInNewContext(function(){
   console.log('code');
-  console.log(info);
-}, { info: 'some info'})
+  console.log(text);
+  console.log(object);
+}, { text: 'some text', object: { id: 'object' }})
