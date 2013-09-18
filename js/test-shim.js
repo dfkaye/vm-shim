@@ -1,5 +1,5 @@
 (function() {
 
-  console.js('test-shim');
+  console.log('test-shim');
   
 }());
