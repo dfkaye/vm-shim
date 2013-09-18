@@ -36,7 +36,7 @@
   
 }());
 
-vm.runInNewContext("console.log('string'); console.log(text);"), { text: 'some text'});
+vm.runInNewContext("console.log('string'); console.log(text);", { text: 'some text'});
 
 vm.runInNewContext(function(){
   console.log('function');
