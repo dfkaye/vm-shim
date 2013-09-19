@@ -11,11 +11,12 @@
   
     var code = '(function t(context){\n';
     (function() {
-      var vars = ';\n';
+
       Object.keys(context).forEach(function(key){
-        vars += 'var ' + key + ' = context.' + key + ';\n';
+        code += 'var ' + key + ' = context.' + key + ';\n';
       });
-      code += vars;
+      
+      code += 'context = null; delete context;\n';
     }());
     code += src + '\n}(context))' ;
     //code += values.join(',');
