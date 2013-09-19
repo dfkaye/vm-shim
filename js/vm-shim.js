@@ -11,23 +11,37 @@
     var names = [];
     var values = [];
     var value;
+    
     Object.keys(context).forEach(function(key, i, keys){
       names.push(key);
+      
+      i < 1 || (values += ', ');
+      //values += 'context["' + key + '"]';
+      
       value = context[key];
-      values.push(typeof value != 'string' && value || "'" + value + "'");
+      
+      // more work to do on value type -
+      // string - value
+      // not object, not string - "'" + value + "'"
+      // object not null
+      
+      console.log(value);
+      values.push(typeof value != 'object' && "'" + value + "'" || value);
     });
 
     console.log(values)
     typeof code == 'string' || (code = '(' + code.toString() + '())');
   
-    code = '(function t(' + names.join(',') + '){\n' + code + '\n}(' + values.join(',') + '))';
-
-    console.log(code);
+    code = '(function t(context, ' + names.join(',') + '){\n' + code + '\n}(' ;
+    code += values.join(',');
+    code += '))';
    
-    var fn = Function(code);
-    fn()
-
+    console.log(code.toString());
+   
+    //var fn = Function(code);
     
+    //console.log(fn.toString());
+    //fn();
   }
   
   global.vm = {
@@ -36,10 +50,11 @@
   
 }());
 
-vm.runInNewContext("console.log('string'); console.log(text);", { text: 'some text'});
+vm.runInNewContext("console.log('string'); console.log(string);", { string: 'string value'});
+vm.runInNewContext("console.log('number'); console.log(number);", { number: 347.347});
+vm.runInNewContext("console.log('boolean'); console.log(boolean);", { boolean: true});
 
 vm.runInNewContext(function(){
   console.log('function');
-  console.log(text);
   console.log(object);
-}, { text: 'some text', object: { id: 'object' }});
+}, { object: { id: 'an object'} });
