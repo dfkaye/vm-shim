@@ -1,6 +1,7 @@
+// vm-shim browser-test
 (function() {
 
-  console.log('test-shim');
+  console.log('browser-test');
   
   vm.runInContext("console.log('should be null: ' + context); console.log('string'); console.log(string);", 
     { string: 'string value' });

@@ -1,0 +1,20 @@
+{
+  "name": "vm-shim",
+  "version": "0.0.0",
+  "description": "browser shim for runInContext methods",
+  "homepage" : "https://github.com/dfkaye/vm-shim",
+  "author": {
+    "name": "david kaye (@dfkaye)",
+    "email" : "dfkaye@yahoo.com"
+  },
+  "devDependencies": {
+    "tape": "~1.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dfkaye/vm-shim.git"
+  },
+  "scripts": {
+    "test": "node ./test/node-test.js"
+  }
+}
