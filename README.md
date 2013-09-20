@@ -1,25 +1,36 @@
 context-bullpen
 ===============
 
-attempt to reproduce/polyfill/infill node.js vm#runIn&lt;Some>Context() methods in browser - no guarantees
+Wan attempt to reproduce/polyfill/infill the node.js <code>vm#runInContext()</code> method in browser - no guarantees.
 
 justify
 -------
 
 Sandboxing (IIFE) (module pattern), etc.  Goal here is to get something like <code>vm.createScript()</code> 
-and <code>script||vm.runIn<Some>Context()</code> methods to run in the browser.
+and <code>script||vm.runInContext()</code> methods to run in the browser, in part to show that it really can be 
+done, partly as a potential shim for browserify which tries to port node.js to the browser (with some caveats) ~ maybe.
 
-something like new Function() will be involved which means debugger support is necessary somewhere, maybe 
-injected as a dev-time setting.
+implementation
+--------------
+
+Use of Function() is involved ~ which means debugger support is necessary somewhere, maybe 
+injected as a dev-time setting.  Tests for errors in code argument should reveal which engines return most helpful 
+messages (type, line, filename, etc.).
 
 rawgithub
 ---------
 
-The test page is be viewable on 
+A working test page is be viewable on 
 <a href='//rawgithub.com/dfkaye/context-bullpen/master/test.html' target='_new' title='opens in new tab or window'>
   rawgithub</a>.
-  
-Should have a test suite running there too so we don't need the console open to see them pass.  
-Adding console support would also be nice.
+
+TODO ~ Should have a test suite running there too so we don't need the console open to see them pass.  
+Adding in-page output to replace the console would also be nice.
+
+first success
+-------------
+
+This idea emerged late at night 17 SEPT 2013 ~ first implemented with rawgithub approach 18 SEPT, full success including objects 
+as properties of the context argument 19 SEPT.  Just noting it for the record.
 
 
