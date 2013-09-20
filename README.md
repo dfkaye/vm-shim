@@ -20,9 +20,9 @@ messages (type, line, filename, etc.).
 browser tests
 -------------
 
-A jasmine test page is be viewable on 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test.html' target='_new' title='opens in new tab or window'>
-  rawgithub</a>.
+A jasmine test page is viewable on rawgithub at 
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html' target='_new' title='opens in new tab or window'>
+  //rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html</a>.
 
 test it on node
 ---------------
