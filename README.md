@@ -1,28 +1,33 @@
 vm-shim
 =======
 
-Wan attempt to reproduce/polyfill/infill the node.js <code>vm#runInContext()</code> method in browser - no guarantees.
+Wan attempt to reproduce/polyfill/infill the node.js 
+<code>vm#runInContext()</code> method in browser ~ no guarantees.
 
 justify
 -------
 
-Sandboxing (IIFE) (module pattern), etc.  Goal here is to get something like <code>vm.createScript()</code> 
-and <code>script||vm.runInContext()</code> methods to run in the browser, in part to show that it really can be 
-done, partly as a potential shim for browserify which tries to port node.js to the browser (with some caveats) ~ maybe.
+Goal here is to get something like <code>vm.createScript()</code> and/or 
+<code>script||vm.runInContext()</code> method to run in the browser, in part to 
+show that it really can be done, partly as a potential shim for browserify which 
+tries to port node.js to the browser (with some caveats) ~ maybe.
 
 implementation
 --------------
 
-Use of Function() is involved ~ which means debugger support is necessary somewhere, maybe 
-injected as a dev-time setting.  Tests for errors in code argument should reveal which engines return most helpful 
-messages (type, line, filename, etc.).
+Use of Function() is involved ~ which means debugger support is necessary somewhere, 
+maybe injected as a dev-time setting.  
+
+__TODO__ ~ add failing tests for errors in code argument should reveal which engines 
+return most helpful messages (type, line, filename, etc.).
 
 browser tests
 -------------
 
-A jasmine test page is viewable on rawgithub at 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html' target='_new' title='opens in new tab or window'>
-  //rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html</a>.
+A jasmine test page is viewable on 
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html' 
+   target='_new' title='opens in new tab or window'>
+  rawgithub</a>.
 
 test it on node
 ---------------
