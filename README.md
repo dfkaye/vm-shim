@@ -35,11 +35,9 @@ Using @substack's tape module to break up big bag of asserts into unit tests. Ru
     cd ./vm-shim
     npm test
   
-# or 
+or 
   
-  node ./test/node-test.js
-
-
+    node ./test/node-test.js
 
 first success
 -------------
