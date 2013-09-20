@@ -32,12 +32,14 @@ test it on node
 
 Using @substack's tape module to break up big bag of asserts into unit tests. Run these with:
 
-<code>
-  cd ./vm-shim
-  npm test
-  # or 
+    cd ./vm-shim
+    npm test
+  
+# or 
+  
   node ./test/node-test.js
-</code>
+
+
 
 first success
 -------------
