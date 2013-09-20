@@ -10,19 +10,21 @@ test('smoke test', function (t) {
   t.end();
 });
 
-test('context not leaked', function (t) {
-  
-  vm.runInContext("console.log('should be null: ' + context);", {}); 
-  t.end();
-});
-
-test('has hook to test', function (t) {
+test('passes t as test', function (t) {
 
   t.plan(1);
   
   vm.runInContext("test.ok(true);", { 
     test: t 
   });   
+});
+
+test('context not leaked', function (t) {
+  
+  vm.runInContext("test.ok(!context);", { 
+    test: t 
+  }); 
+  t.end();
 });
 
 test('string property', function (t) {

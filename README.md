@@ -17,15 +17,12 @@ Use of Function() is involved ~ which means debugger support is necessary somewh
 injected as a dev-time setting.  Tests for errors in code argument should reveal which engines return most helpful 
 messages (type, line, filename, etc.).
 
-rawgithub html test page
-------------------------
+browser tests
+-------------
 
-A working test page is be viewable on 
+A jasmine test page is be viewable on 
 <a href='//rawgithub.com/dfkaye/vm-shim/master/test.html' target='_new' title='opens in new tab or window'>
   rawgithub</a>.
-
-TODO ~ Should have a test suite running there too so we don't need the console open to see them pass.  
-Adding in-page output to replace the console would also be nice.
 
 test it on node
 ---------------
@@ -48,7 +45,4 @@ approach 18 SEPT, full success including objects as properties of the context
 argument 19 SEPT.
 
 Tape tests added 20 SEPT.
-
-More to come...
-
-
+Jasmine tests/page added 20 SEPT.
