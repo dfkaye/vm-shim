@@ -1,5 +1,5 @@
-context-bullpen
-===============
+vm-shim
+=======
 
 Wan attempt to reproduce/polyfill/infill the node.js <code>vm#runInContext()</code> method in browser - no guarantees.
 
@@ -21,7 +21,7 @@ rawgithub
 ---------
 
 A working test page is be viewable on 
-<a href='//rawgithub.com/dfkaye/context-bullpen/master/test.html' target='_new' title='opens in new tab or window'>
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test.html' target='_new' title='opens in new tab or window'>
   rawgithub</a>.
 
 TODO ~ Should have a test suite running there too so we don't need the console open to see them pass.  
