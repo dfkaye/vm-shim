@@ -11,12 +11,12 @@ test('contains runInContext()', function (t) {
   t.equal(typeof vm.runInContext, 'function');
 });
 
-test('passes t as test', function (t) {
+test('passes t', function (t) {
 
   t.plan(1);
   
-  vm.runInContext("test.ok(true);", { 
-    test: t 
+  vm.runInContext("t.ok(true);", { 
+    t: t 
   });   
 });
 
@@ -24,8 +24,8 @@ test('context not leaked', function (t) {
 
   t.plan(1);
   
-  vm.runInContext("test.ok(!context);", { 
-    test: t 
+  vm.runInContext("t.ok(!context);", { 
+    t: t 
   }); 
 });
 
@@ -33,8 +33,8 @@ test('string property', function (t) {
 
   t.plan(1);
   
-  vm.runInContext("test.equal(string, 'string value');", { 
-    string: 'string value', test: t 
+  vm.runInContext("t.equal(string, 'string value');", { 
+    string: 'string value', t: t 
   });
 });
 
@@ -42,8 +42,8 @@ test('number property', function (t) {
 
   t.plan(1);
   
-  vm.runInContext("test.equal(number, 347.347);", { 
-    number: 347.347, test: t 
+  vm.runInContext("t.equal(number, 347.347);", { 
+    number: 347.347, t: t 
   });
 });
 
@@ -51,8 +51,8 @@ test('boolean property', function (t) {
 
   t.plan(1);
   
-  vm.runInContext("test.equal(boolean, true);", { 
-    boolean: true, test: t 
+  vm.runInContext("t.equal(boolean, true);", { 
+    boolean: true, t: t 
   });
 });
 
@@ -60,8 +60,8 @@ test('object property', function (t) {
 
   t.plan(1);
   
-  vm.runInContext("test.equal(object.id, 'an id/string');", { 
-    object: { id: 'an id/string' }, test: t 
+  vm.runInContext("t.equal(object.id, 'an id/string');", { 
+    object: { id: 'an id/string' }, t: t 
   });
 });
 
@@ -71,10 +71,10 @@ test('accepts function as src-code', function (t) {
 
   vm.runInContext(function(){
   
-    test.equal(context, undefined); 
-    test.equal(object.id, 'an id/string');
+    t.equal(context, undefined); 
+    t.equal(object.id, 'an id/string');
     
-  }, { object: { id: 'an id/string' }, test: t });
+  }, { object: { id: 'an id/string' }, t: t });
 });
 
 test('vm internals not leaked', function (t) {
@@ -85,12 +85,12 @@ test('vm internals not leaked', function (t) {
   
     var undef = 'undefined';
     
-    test.equal(typeof context, undef); 
-    test.equal(typeof context, undef); 
-    test.equal(typeof context, undef); 
-    test.equal(typeof context, undef); 
+    t.equal(typeof context, undef); 
+    t.equal(typeof context, undef); 
+    t.equal(typeof context, undef); 
+    t.equal(typeof context, undef); 
 
-  }, { test: t });
+  }, { t: t });
   
 });
 
@@ -102,9 +102,9 @@ test("context attrs override external scope vars", function(t) {
    
   vm.runInContext(function(){
   
-    test.equal(attr, 'ok');
+    t.equal(attr, 'ok');
 
-  }, { attr: 'ok', test: t });
+  }, { attr: 'ok', t: t });
 });
 
 test("bad code throws error", function(t) {
@@ -120,16 +120,16 @@ test("bad code throws error", function(t) {
     }
   
     // capture it
-    test.throws(throwIt, msg);
+    t.throws(throwIt, msg);
 
     // now try it and view the console
     try {
       throwIt();
     } catch(e) {
       console.dir(e);
-      test.equal(e.message, msg);
+      t.equal(e.message, msg);
     }
   }
 
-  vm.runInContext(exec, { test: t });
+  vm.runInContext(exec, { t: t });
 });

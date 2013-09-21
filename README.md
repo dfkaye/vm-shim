@@ -53,7 +53,7 @@ code is passed in to Function() so that the keynames can't leak outside the new
 function's scope.
 
 Currently the unit tests rely on the context param to contain a reference to the 
-*t* or *test* object (when using *tape*), or the *expect* object (when running 
+test's *t* object (when using *tape*), or the *expect* object (when running 
 *jasmine*).
 
 Example using *tape*:
@@ -66,9 +66,9 @@ Example using *tape*:
        
       vm.runInContext(function(){
       
-        test.equal(attr, 'ok');
+        t.equal(attr, 'ok');
 
-      }, { attr: 'ok', test: t });
+      }, { attr: 'ok', t: t });
     });
 
 Example using *jasmine*:
@@ -85,7 +85,8 @@ Example using *jasmine*:
     });
 
  
-__footgun__
+footgun
+-------
 
 Because JavaScript is a footgun where Function() is involved, debugger support 
 will be necessary at some point, (as with using eval()).  I've added simple 
