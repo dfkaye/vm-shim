@@ -19,7 +19,7 @@ tries to port node.js to the browser (with some caveats) ~ maybe.
 browser tests
 -------------
 
-Using @pivotal <a href='https://github.com/pivotal/jasmine'>jasmine</a> for the 
+Using @pivotallabs' <a href='https://github.com/pivotal/jasmine'>jasmine</a> for the 
 browser suite.
 
 The *jasmine* test page is viewable on 
