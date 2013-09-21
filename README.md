@@ -2,7 +2,11 @@ vm-shim
 =======
 
 Wan attempt to reproduce/polyfill/infill the node.js 
-<code>vm#runInContext()</code> method in browser ~ no guarantees.
+<code>vm#runIn<Some?>Context()</code> methods in browser ~ no guarantees.
+
++<code>vm#runInContext(code, context)</code> -- "done"
++<code>vm#runInNewContext(code)</code> -- todo
++<code>vm#runInThisContext(code)</code> -- todo
 
 justify
 -------
@@ -15,15 +19,21 @@ tries to port node.js to the browser (with some caveats) ~ maybe.
 browser tests
 -------------
 
-A jasmine test page is viewable on 
+Using @pivotal <a href='https://github.com/pivotal/jasmine'>jasmine</a> for the 
+browser suite.
+
+The *jasmine* test page is viewable on 
 <a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html' 
    target='_new' title='opens in new tab or window'>
   rawgithub</a>.
 
-test it on node
----------------
+node tests
+----------
 
-Using @substack's tape module to break up big bag of asserts into unit tests. Run these with:
+Out of curiosity, I've included a test suite to detect possible issues on Node, 
+using @substack's <a href='https://github.com/substack/tape'>tape</a> module. 
+
+Run these with:
 
     cd ./vm-shim
     npm test
@@ -46,39 +56,40 @@ Currently the unit tests rely on the context param to contain a reference to the
 *t* or *test* object (when using *tape*), or the *expect* object (when running 
 *jasmine*).
 
-Example using tape:
+Example using *tape*:
 
-    test('accepts function as src-code', function (t) {
+    test("context attrs override external scope vars", function(t) {
 
-      t.plan(2);
-            
+      t.plan(1);
+
+      var attr = "shouldn't see this";
+       
       vm.runInContext(function(){
       
-        test.ok(!context, 'should be null'); 
-        test.equal(object.id, 'an id/string');
-        
-      }, { object: { id: 'an id/string' }, test: t });
+        test.equal(attr, 'ok');
+
+      }, { attr: 'ok', test: t });
     });
 
-Example using jasmine:
+Example using *jasmine*:
 
-    it("accepts function as src-code", function() {
+    it("context attrs override external scope vars", function() {
+
+      var attr = "shouldn't see this";
 
       vm.runInContext(function(){
-      
-        expect(context).toBe(null); 
-        expect(object.id).toBe('an id/string');
-        
-      }, { object: { id: 'an id/string' }, expect: expect });
+
+        expect(attr).toBe('ok');
+
+      }, { attr: 'ok', expect: expect });
     });
 
  
-__TODO__
+__footgun__
 
-Because Function() is involved, debugger support will be necessary at some point, 
-(as with using eval()), possibly injected as a dev-time setting.  Need to add 
-failing tests for errors in code argument, should reveal which engines return 
-which helpful messages (type, line, filename, etc.).
+Because JavaScript is a footgun where Function() is involved, debugger support 
+will be necessary at some point, (as with using eval()).  I've added simple 
+throw-error tests to find which engines return which helpful messages.
 
 
 first success
@@ -92,3 +103,4 @@ Just noting for the record:
   + Started with console statements and prayer ~ removed both for real unit tests
   + Tape tests added 20 SEPT.
   + Jasmine tests/page added 20 SEPT.
++ Error, and leakage tests added 21 SEPT.

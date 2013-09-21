@@ -1,23 +1,24 @@
 ﻿// vm-shim browser-spec
 
 describe("vm-shim suite", function() {
-
-  /*it("contains spec with an expectation", function() {
-    expect(true).toBe(true);
-  });*/
   
-  it("contains runInContext() ", function() {
+  it("contains runInContext()", function() {
+  
     expect(typeof vm.runInContext).toBe('function');
   });
   
+  // rest of these lean on vm to execute assertions
+  
   it("passes expect to context", function() {
+  
     vm.runInContext("expect(true).toBe(true);", { 
         expect: expect
     });
   });  
     
   it("context not leaked", function() {
-    vm.runInContext("expect(context).toBe(null);", { 
+  
+    vm.runInContext("expect(context).toBe(undefined);", { 
         expect: expect
     });
   });
@@ -58,12 +59,61 @@ describe("vm-shim suite", function() {
 
     vm.runInContext(function(){
   
-      expect(context).toBe(null); 
+      expect(context).toBe(undefined);
       expect(object.id).toBe('an id/string');
     
     }, { object: { id: 'an id/string' }, expect: expect });
   });
+
+  it("internal vars not leaked", function() {
+
+    vm.runInContext(function(code,src,key){
+    
+      var undef = 'undefined';
+      
+      expect(typeof context).toBe(undef);
+      expect(typeof code).toBe(undef);
+      expect(typeof src).toBe(undef);
+      expect(typeof key).toBe(undef);
+    
+    }, { expect: expect });
+  });
   
+  it("context attrs override external scope vars", function() {
+
+    var attr = "shouldn't see this";
+   
+    vm.runInContext(function(){
+  
+      expect(attr).toBe('ok');
+
+    }, { attr: 'ok', expect: expect });
+  });
+  
+  it("bad code throws error", function() {
+    
+    function exec(){
+    
+      var msg = 'barf is not defined';
+      
+      function throwIt() {
+        barf;
+      }
+      
+      // capture it
+      expect(throwIt).toThrow(msg);
+
+      // now try it and view the console
+      try {
+        throwIt();
+      } catch (e) {
+        console.dir(e);
+        expect(e.message).toBe(msg);
+      }
+    }
+    
+    vm.runInContext(exec, { expect: expect });
+  });  
 });
 
 /*
