@@ -93,22 +93,19 @@ describe("vm-shim suite", function() {
   it("bad code throws error", function() {
     
     function exec(){
-    
-      var msg = 'barf is not defined';
       
       function throwIt() {
         barf;
       }
-      
-      // capture it
-      expect(throwIt).toThrow(msg);
 
       // now try it and view the console
       try {
         throwIt();
       } catch (e) {
-        console.dir(e);
-        expect(e.message).toBe(msg);
+        if (typeof console != 'undefined') {
+          console.dir(e);
+        }
+        expect(e.message).toContain('barf');
       }
     }
     
