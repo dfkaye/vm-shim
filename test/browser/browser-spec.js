@@ -13,13 +13,13 @@ describe("vm-shim suite", function() {
   it("passes expect to context", function() {
     vm.runInContext("expect(true).toBe(true);", { 
         expect: expect
-      });
+    });
   });  
     
   it("context not leaked", function() {
     vm.runInContext("expect(context).toBe(null);", { 
         expect: expect
-      });
+    });
   });
   
   it("passes string value", function() {
@@ -27,7 +27,7 @@ describe("vm-shim suite", function() {
     vm.runInContext("expect(string).toBe('string value');", { 
         expect: expect,
         string: 'string value'
-      });
+    });
   });
   
   it("passes number value", function() {
@@ -35,7 +35,7 @@ describe("vm-shim suite", function() {
     vm.runInContext("expect(number).toBe(347.347);", { 
         expect: expect,
         number: 347.347
-      });
+    });
   });
   
   it("passes boolean value", function() {
@@ -43,7 +43,7 @@ describe("vm-shim suite", function() {
     vm.runInContext("expect(boolean).toBe(true);", { 
         expect: expect,
         boolean: true
-      });
+    });
   });
 
   it("passes objects as properties", function() {
@@ -52,20 +52,16 @@ describe("vm-shim suite", function() {
       expect: expect,
       object: { id: 'an id/string' } 
     });
-    
   });
 
   it("accepts function as src-code", function() {
+
+    vm.runInContext(function(){
   
-    var fn = function(){
       expect(context).toBe(null); 
       expect(object.id).toBe('an id/string');
-    };
     
-    vm.runInContext(fn, { 
-        expect: expect,
-        object: { id: 'an id/string' }
-    });
+    }, { object: { id: 'an id/string' }, expect: expect });
   });
   
 });
