@@ -65,18 +65,37 @@ describe("vm-shim suite", function() {
     }, { object: { id: 'an id/string' }, expect: expect });
   });
 
-  it("internal vars not leaked", function() {
+  it("global and vm not leaked", function() {
 
-    vm.runInContext(function(code,src,key){
+    vm.runInContext(function(){
+    
+      var undef = 'undefined';
+
+      expect(global.vm).not.toBeDefined();
+      expect(vm).not.toBeDefined();
+      expect(global).not.toBe(window);
+      
+    }, { expect: expect, global: global });
+    
+    // should preserve vm
+    expect(typeof vm).not.toBe('undefined');
+    
+  });
+  
+  it("vm internals not leaked", function() {
+
+    vm.runInContext(function(){
     
       var undef = 'undefined';
       
-      expect(typeof context).toBe(undef);
+      expect(context).not.toBeDefined();
+
       expect(typeof code).toBe(undef);
       expect(typeof src).toBe(undef);
       expect(typeof key).toBe(undef);
-    
+      
     }, { expect: expect });
+    
   });
   
   it("context attrs override external scope vars", function() {
@@ -103,9 +122,10 @@ describe("vm-shim suite", function() {
         throwIt();
       } catch (e) {
         if (typeof console != 'undefined') {
-          console.dir(e);
+          console.log(e.message);
         }
-        expect(e.message).toContain('barf');
+        // matcher for msg variants between IE vs FF vs WK...
+        expect(e.message).toMatch(/\'?barf\'? is (un|not )defined/);
       }
     }
     

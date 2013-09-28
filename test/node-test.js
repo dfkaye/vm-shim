@@ -77,6 +77,22 @@ test('accepts function as src-code', function (t) {
   }, { object: { id: 'an id/string' }, t: t });
 });
 
+test('global and vm not leaked', function (t) {
+
+  t.plan(3);
+  
+  vm.runInContext(function(){
+  
+    var undef = 'undefined';
+  
+    t.equal(typeof global.vm, undef);
+    t.equal(typeof vm, undef);
+    
+  }, { t: t, global: global });
+  
+  t.notEqual(typeof vm, 'undefined', 'should preserve vm');
+});
+
 test('vm internals not leaked', function (t) {
 
   t.plan(4);
@@ -86,15 +102,14 @@ test('vm internals not leaked', function (t) {
     var undef = 'undefined';
     
     t.equal(typeof context, undef); 
-    t.equal(typeof context, undef); 
-    t.equal(typeof context, undef); 
-    t.equal(typeof context, undef); 
-
+    t.equal(typeof code, undef); 
+    t.equal(typeof src, undef); 
+    t.equal(typeof key, undef); 
+          
   }, { t: t });
-  
 });
 
-test("context attrs override external scope vars", function(t) {
+test('context attrs override external scope vars', function(t) {
 
   t.plan(1);
 
@@ -107,7 +122,7 @@ test("context attrs override external scope vars", function(t) {
   }, { attr: 'ok', t: t });
 });
 
-test("bad code throws error", function(t) {
+test('bad code throws error', function(t) {
 
   t.plan(2);
   

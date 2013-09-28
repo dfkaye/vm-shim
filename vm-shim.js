@@ -19,8 +19,14 @@
   function runInContext(src, context/*, filename*/) {
 
     typeof src == 'string' || (src = '(' + src.toString() + '())');
-  
-    var code = '\n';
+    
+    // Object.create shim
+    function F(){}
+    F.prototype = global;
+    global = new F;
+    global.vm = undefined;
+    
+    var code = 'var vm;\n';
 
     for (var key in context) {
       if (context.hasOwnProperty(key)) {
@@ -31,7 +37,7 @@
     code += 'context = undefined; delete context;\n';
     code += src;
 
-    Function('context', code)(context);
+    Function('context', code).call(null, context);
   }
 
 }());
