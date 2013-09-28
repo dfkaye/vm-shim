@@ -4,9 +4,9 @@ vm-shim
 Wan attempt to reproduce/polyfill/infill the node.js 
 <code>vm#runIn<Some?>Context()</code> methods in browser ~ no guarantees.
 
-+<code>vm#runInContext(code, context)</code> -- "done"
-+<code>vm#runInNewContext(code)</code> -- todo
-+<code>vm#runInThisContext(code)</code> -- todo
++ <code>vm#runInContext(code, context)</code> -- "done"
++ <code>vm#runInNewContext(code)</code> -- todo
++ <code>vm#runInThisContext(code)</code> -- todo
 
 justify
 -------
