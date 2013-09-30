@@ -135,16 +135,16 @@ test('bad code throws error', function(t) {
     }
   
     // capture it
-    t.throws(throwIt, msg);
+    t.throws(throwIt);
 
     // now try it and view the console
     try {
       throwIt();
     } catch(e) {
-      console.dir(e);
-      t.equal(e.message, msg);
+      //console.dir(e); // keep around for Error type output
+      t.equal(e.message, /\'?barf\'? is (un|not )defined/.exec(e.message)[0]);
     }
   }
-
+  
   vm.runInContext(exec, { t: t });
 });
