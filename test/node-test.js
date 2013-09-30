@@ -77,6 +77,34 @@ test('accepts function as src-code', function (t) {
   }, { object: { id: 'an id/string' }, t: t });
 });
 
+test("can modify var values", function(t) {
+
+  t.plan(2);
+
+  var count = 2;
+    
+  vm.runInContext("count += 1;t.equal(count, 3);", { count: 2, t: t });
+    
+  t.equal(count, 2);
+});
+  
+test("can modify var values in functions", function(t) {
+
+  t.plan(2);
+  
+  var count = 2;
+    
+  vm.runInContext(function(){
+    
+    count += 1;
+      
+    t.equal(count, 3);
+    
+  }, { count: count, t: t });
+    
+  t.equal(count, 2);
+});
+
 test('global and vm not leaked', function (t) {
 
   t.plan(3);

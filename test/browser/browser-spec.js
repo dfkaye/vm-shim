@@ -65,6 +65,30 @@ describe("vm-shim suite", function() {
     }, { object: { id: 'an id/string' }, expect: expect });
   });
 
+  it("can modify var values", function() {
+
+    var count = 2;
+    
+    vm.runInContext("count += 1;expect(count).toBe(3);", { count: 2, expect: expect });
+    
+    expect(count).toBe(2);
+  });
+  
+  it("can modify var values in functions", function() {
+
+    var count = 2;
+    
+    vm.runInContext(function(){
+    
+      count += 1;
+      
+      expect(count).toBe(3);
+    
+    }, { count: count, expect: expect });
+    
+    expect(count).toBe(2);
+  });
+
   it("global and vm not leaked", function() {
 
     vm.runInContext(function(){
