@@ -22,7 +22,7 @@
     
     // Object.create shim
     function F(){}
-    F.prototype = global;
+    F.prototype = (typeof Window != 'undefined' && Window.prototype) || global;
     global = new F;
     global.vm = undefined;
     
