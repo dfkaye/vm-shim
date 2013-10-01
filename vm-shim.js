@@ -24,8 +24,7 @@
     function F(){}
     F.prototype = (typeof Window != 'undefined' && Window.prototype) || global;
     global = new F;
-    global.vm = undefined;
-    
+        
     var code = 'var vm;\n';
 
     for (var key in context) {
