@@ -23,8 +23,10 @@
     // Object.create shim
     function F(){}
     F.prototype = (typeof Window != 'undefined' && Window.prototype) || global;
-    global = new F;
-        
+    
+    // shadow out the main global
+    context.global = new F;
+    
     var code = 'var vm;\n';
 
     for (var key in context) {
