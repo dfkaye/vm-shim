@@ -148,8 +148,14 @@ describe("vm-shim suite", function() {
         if (typeof console != 'undefined') {
           console.log(e.message);
         }
+        
         // matcher for msg variants between IE vs FF vs WK...
-        expect(e.message).toMatch(/\'?barf\'? is (un|not )defined/);
+        
+        // opera: Undefined variable: barf
+        // IE 'barf' is undefined
+        // chrome, ff: barf is not defined
+        expect(e.message).toMatch(/barf/);
+        expect(e.message).toMatch(/(not defined|undefined)/i);
       }
     }
     
