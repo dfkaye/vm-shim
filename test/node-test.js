@@ -185,6 +185,7 @@ test("runInNewContext: global and vm not shared", function(t) {
   t.plan(3);
       
   vm.runInNewContext(function(){
+  
     var undef = 'undefined';
 
     t.equal(typeof global.vm, undef);
