@@ -50,7 +50,7 @@
 
   function runInThisContext(src/*, filename*/) {
   
-    return runInContext(src, global/*, filename*/)
+    return runInContext(src, { global: global }/*, filename*/)
   }
   
 }());

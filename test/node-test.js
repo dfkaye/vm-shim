@@ -174,7 +174,7 @@ test('global and vm not leaked', function (t) {
     t.equal(typeof global.vm, undef);
     t.equal(typeof vm, undef);
     
-  }, { t: t, global: global });
+  }, { t: t });
   
   t.notEqual(typeof vm, 'undefined', 'should preserve vm');
 });
@@ -183,14 +183,14 @@ test('global and vm not leaked', function (t) {
 test("runInNewContext: global and vm not shared", function(t) {
 
   t.plan(3);
-  
+      
   vm.runInNewContext(function(){
     var undef = 'undefined';
-  
+
     t.equal(typeof global.vm, undef);
     t.equal(typeof vm, undef);
     
-  }, { t: t, global: global });
+  }, { t: t });
   
   t.notEqual(typeof vm, 'undefined', 'should preserve vm');
 });
