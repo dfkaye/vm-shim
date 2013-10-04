@@ -89,23 +89,6 @@ describe("vm-shim suite", function() {
     expect(count).toBe(2);
   });
 
-  it("global and vm not leaked", function() {
-
-    vm.runInContext(function(){
-    
-      var undef = 'undefined';
-
-      expect(global.vm).not.toBeDefined();
-      expect(vm).not.toBeDefined();
-      expect(global).not.toBe(window);
-      
-    }, { expect: expect, global: global });
-    
-    // should preserve vm
-    expect(typeof vm).not.toBe('undefined');
-    
-  });
-  
   it("vm internals not leaked", function() {
 
     vm.runInContext(function(){
@@ -119,7 +102,6 @@ describe("vm-shim suite", function() {
       expect(typeof key).toBe(undef);
       
     }, { expect: expect });
-    
   });
   
   it("context attrs override external scope vars", function() {
@@ -160,7 +142,47 @@ describe("vm-shim suite", function() {
     }
     
     vm.runInContext(exec, { expect: expect });
-  });  
+  });
+  
+  it("runInNewContext: global and vm not shared", function() {
+
+    vm.runInNewContext(function(){
+    
+      var undef = 'undefined';
+
+      expect(global.vm).not.toBeDefined();
+      expect(global).not.toBe(window);
+      
+    }, { expect: expect, global: global });
+    
+    // should preserve vm
+    expect(typeof vm).not.toBe('undefined');
+  });
+  
+  
+  it("runInThisContext: global shared", function() {
+    
+    vm.runInThisContext(function(){
+    
+      expect(global.vm).toBe(vm);
+      expect(global).toBe(window);
+    });
+  });
+  
+  it("runInThisContext: context not leaked", function() {
+
+    var control = 'outer';
+    
+    vm.runInThisContext(function(){
+    
+      control = 'inner';
+      expect(control).toBe('inner');
+    });
+    
+    // should preserve control
+    expect(control).toBe('outer');
+  });
+    
 });
 
 /*

@@ -7,7 +7,9 @@
   }
   
   exports = {
-    runInContext : runInContext
+    runInContext     : runInContext,
+    runInNewContext  : runInNewContext,
+    runInThisContext : runInThisContext
   }
 
   if (typeof module != 'undefined') {
@@ -20,14 +22,7 @@
 
     typeof src == 'string' || (src = '(' + src.toString() + '())');
     
-    // Object.create shim
-    function F(){}
-    F.prototype = (typeof Window != 'undefined' && Window.prototype) || global;
-    
-    // shadow out the main global
-    context.global = new F;
-    
-    var code = 'var vm;\n';
+    var code = '';
 
     for (var key in context) {
       if (context.hasOwnProperty(key)) {
@@ -38,7 +33,24 @@
     code += 'context = undefined; delete context;\n';
     code += src;
 
-    Function('context', code).call(null, context);
+    return Function('context', code).call(null, context);
   }
 
+  function runInNewContext(src, context/*, filename*/) {
+
+    // Object.create shim
+    function F(){}
+    F.prototype = (typeof Window != 'undefined' && Window.prototype) || global;
+    
+    // shadow out the main global
+    context.global = new F;
+    
+    return runInContext(src, context/*, filename*/)
+  }
+
+  function runInThisContext(src/*, filename*/) {
+  
+    return runInContext(src, global/*, filename*/)
+  }
+  
 }());

@@ -105,22 +105,6 @@ test("can modify var values in functions", function(t) {
   t.equal(count, 2);
 });
 
-test('global and vm not leaked', function (t) {
-
-  t.plan(3);
-  
-  vm.runInContext(function(){
-  
-    var undef = 'undefined';
-  
-    t.equal(typeof global.vm, undef);
-    t.equal(typeof vm, undef);
-    
-  }, { t: t, global: global });
-  
-  t.notEqual(typeof vm, 'undefined', 'should preserve vm');
-});
-
 test('vm internals not leaked', function (t) {
 
   t.plan(4);
@@ -175,4 +159,76 @@ test('bad code throws error', function(t) {
   }
   
   vm.runInContext(exec, { t: t });
+});
+
+
+
+test('global and vm not leaked', function (t) {
+
+  t.plan(3);
+  
+  vm.runInContext(function(){
+  
+    var undef = 'undefined';
+  
+    t.equal(typeof global.vm, undef);
+    t.equal(typeof vm, undef);
+    
+  }, { t: t, global: global });
+  
+  t.notEqual(typeof vm, 'undefined', 'should preserve vm');
+});
+
+
+test("runInNewContext: global and vm not shared", function(t) {
+
+  t.plan(3);
+  
+  vm.runInNewContext(function(){
+    var undef = 'undefined';
+  
+    t.equal(typeof global.vm, undef);
+    t.equal(typeof vm, undef);
+    
+  }, { t: t, global: global });
+  
+  t.notEqual(typeof vm, 'undefined', 'should preserve vm');
+});
+  
+
+test("runInThisContext: global shared", function(t) {
+
+  t.plan(1);
+  
+  global.t = t;
+  global.vm = vm;
+  
+  vm.runInThisContext(function(){
+
+    global.t.equal(global.vm, vm);
+  });
+  
+  delete global.t;
+  delete global.vm;
+});
+
+
+test("runInThisContext: context not leaked", function(t) {
+
+  t.plan(2);
+
+  var control = 'outer';
+
+  global.t = t;
+
+  vm.runInThisContext(function(){
+
+    control = 'inner';
+    global.t.equal(control, 'inner');
+  });
+
+  delete global.t;
+    
+  // should preserve control
+  t.equal(control, 'outer');
 });
