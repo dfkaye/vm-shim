@@ -121,5 +121,5 @@ Just noting for the record:
   + Tape tests added 20 SEPT.
   + Jasmine tests/page added 20 SEPT.
 + Error, and leakage tests added 21 SEPT.
-+ runInNewContext, runInThisContext methods added; runInContext refactored 3 OCT
++ runInNewContext, runInThisContext methods added; runInContext refactored 4 OCT
 + CoffeeScript test with jasmine-node added 6 OCT
