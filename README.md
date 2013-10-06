@@ -46,13 +46,13 @@ or
 CoffeeScript tests
 ------------------
 
-As a further learning exercise, I've created a node.spec.coffee test file that 
-uses jasmine-node.  
+As a further learning exercise, I've created a node.spec.coffee test file and 
+run it with jasmine-node.  
 
     jasmine-node --coffee --verbose ./test/node.spec.coffee
 
-jasmine-node expects your tests to be .spec files; and your coffee specs to be 
-have .coffee appended to them, e.g., [name].spec.coffee
+jasmine-node expects your tests to be ".spec" files; and that your coffeescript 
+spec names have ".coffee" appended to them, e.g., [name].spec.coffee
 
 
 *Eventually I will write the tape tests in CoffeeScript to see if that helps*
@@ -104,7 +104,7 @@ Example using *jasmine*:
 footgun
 -------
 
-Because _JavaScript is a footgun__ where Function() is involved, debugger support 
+Because __JavaScript is a footgun__ where Function() is involved, debugger support 
 will be necessary at some point, (as with using eval()).  I've added simple 
 throw-error tests to find which engines return which helpful messages.
 
