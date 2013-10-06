@@ -4,9 +4,9 @@ vm-shim
 Wan attempt to reproduce/polyfill/infill the node.js 
 <code>vm#runIn<Some?>Context()</code> methods in browser ~ no guarantees.
 
-+ <code>vm#runInContext(code, context)</code> -- "done"
-+ <code>vm#runInNewContext(code)</code> -- todo
-+ <code>vm#runInThisContext(code)</code> -- todo
++ <code>vm#runInContext(code, context)</code>
++ <code>vm#runInNewContext(code, context)</code>
++ <code>vm#runInThisContext(code)</code>
 
 justify
 -------
@@ -41,6 +41,22 @@ Run these with:
 or 
   
     node ./test/node-test.js
+
+    
+CoffeeScript tests
+------------------
+
+As a further learning exercise, I've created a node.spec.coffee test file that 
+uses jasmine-node.  
+
+    jasmine-node --coffee --verbose ./test/node.spec.coffee
+
+jasmine-node expects your tests to be .spec files; and your coffee specs to be 
+have .coffee appended to them, e.g., [name].spec.coffee
+
+
+*Eventually I will write the tape tests in CoffeeScript to see if that helps*
+
     
 implementation
 --------------
@@ -88,7 +104,7 @@ Example using *jasmine*:
 footgun
 -------
 
-Because JavaScript is a footgun where Function() is involved, debugger support 
+Because _JavaScript is a footgun__ where Function() is involved, debugger support 
 will be necessary at some point, (as with using eval()).  I've added simple 
 throw-error tests to find which engines return which helpful messages.
 
@@ -105,3 +121,5 @@ Just noting for the record:
   + Tape tests added 20 SEPT.
   + Jasmine tests/page added 20 SEPT.
 + Error, and leakage tests added 21 SEPT.
++ runInNewContext, runInThisContext methods added; runInContext refactored 3 OCT
++ CoffeeScript test with jasmine-node added 6 OCT
