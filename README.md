@@ -11,10 +11,11 @@ Wan attempt to reproduce/polyfill/infill the node.js
 justify
 -------
 
-Goal here is to get something like <code>vm.createScript()</code> and/or 
-<code>script||vm.runInContext()</code> method to run in the browser, in part to 
-show that it really can be done, partly as a potential shim for browserify which 
-tries to port node.js to the browser (with some caveats) ~ maybe.
+Goal here is to get Node.js's <code>vm.runInContext()</code> methods to run in 
+the browser, partly to show that it really can be done, partly as a potential 
+replacement for browserify's 
+[vm-browserify](https://github.com/substack/vm-browserify) which uses iframes to 
+create and clone globals and contexts.
 
 browser tests
 -------------
