@@ -121,15 +121,16 @@ test('vm internals not leaked', function (t) {
   }, { t: t });
 });
 
-test('context attrs override external scope vars', function(t) {
+test('overrides external scope vars with context attrs', function(t) {
 
-  t.plan(1);
+  t.plan(2);
 
   var attr = "shouldn't see this";
    
   vm.runInContext(function(){
   
     t.equal(attr, 'ok');
+    t.notEqual(attr, 'should not see this');
 
   }, { attr: 'ok', t: t });
 });

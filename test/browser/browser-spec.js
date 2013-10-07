@@ -104,13 +104,14 @@ describe("vm-shim suite", function() {
     }, { expect: expect });
   });
   
-  it("context attrs override external scope vars", function() {
+  it("overrides external scope vars with context attrs", function() {
 
     var attr = "shouldn't see this";
    
     vm.runInContext(function(){
   
       expect(attr).toBe('ok');
+      expect(attr).not.toBe('should not see this');
 
     }, { attr: 'ok', expect: expect });
   });

@@ -74,7 +74,7 @@ test's *t* object (when using *tape*), or the *expect* object (when running
 
 Example using *tape*:
 
-    test("context attrs override external scope vars", function(t) {
+    test("overrides external scope vars with context attrs", function(t) {
 
       t.plan(1);
 
@@ -83,24 +83,39 @@ Example using *tape*:
       vm.runInContext(function(){
       
         t.equal(attr, 'ok');
+        t.notEqual(attr, 'should not see this');
 
       }, { attr: 'ok', t: t });
     });
 
 Example using *jasmine*:
 
-    it("context attrs override external scope vars", function() {
+    it("overrides external scope vars with context attrs", function() {
 
       var attr = "shouldn't see this";
 
       vm.runInContext(function(){
 
         expect(attr).toBe('ok');
+        expect(attr).not.toBe('should not see this');
 
       }, { attr: 'ok', expect: expect });
     });
 
- 
+Example using *jasmine-node --coffee*:
+
+    it 'overrides external scope vars with context attrs', ->
+
+      attr = 'should not see this'
+      
+      vm.runInContext (->
+        
+        expect(attr).toBe('ok')
+        expect(attr).not.toBe('should not see this')
+        
+      ), { attr: 'ok', expect: expect }
+    
+    
 footgun
 -------
 
