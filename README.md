@@ -155,3 +155,4 @@ Just noting for the record:
 + Error, and leakage tests added 21 SEPT.
 + runInNewContext, runInThisContext methods added; runInContext refactored 4 OCT
 + CoffeeScript test with jasmine-node added 6 OCT
++ tape test written in CoffeeScript test added 7 OCT
