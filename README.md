@@ -56,7 +56,9 @@ jasmine-node expects your tests to be ".spec" files; and that your coffeescript
 spec names have ".coffee" appended to them, e.g., [name].spec.coffee
 
 
-*Eventually I will write the tape tests in CoffeeScript to see if that helps*
+I've even written the tape tests in CoffeeScript to see what that's like:
+
+    coffee ./test/tape-test.coffee
 
     
 implementation
@@ -116,7 +118,21 @@ Example using *jasmine-node --coffee*:
         
       ), { attr: 'ok', expect: expect }
     
-    
+Example using *tape* test written in *coffeescript*:
+
+    test 'overrides external scope vars with context attrs', (t) ->
+
+      t.plan(2)
+
+      attr = "shouldn't see this"
+       
+      vm.runInContext ->
+      
+        t.equal(attr, 'ok')
+        t.notEqual(attr, 'should not see this')
+
+      , { attr: 'ok', t: t }
+  
 footgun
 -------
 
