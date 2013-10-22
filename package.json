@@ -16,6 +16,8 @@
   },
   "scripts": {
     "test": "node ./test/tape-test.js",
+    "tape-coffee": "coffee ./test/tape-test.coffee",
+    "jasmine-coffee": "jasmine-node --coffee --verbose ./test/node.spec.coffee",
     "scope": "node ./test/scope-injection-test.js"
   }
 }

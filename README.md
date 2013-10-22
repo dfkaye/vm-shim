@@ -50,6 +50,10 @@ CoffeeScript tests
 As a further learning exercise, I've created a node.spec.coffee test file and 
 run it with jasmine-node.  
 
+    npm run-script jasmine-coffee
+    
+  or
+
     jasmine-node --coffee --verbose ./test/node.spec.coffee
 
 jasmine-node expects your tests to be ".spec" files; and that your coffeescript 
@@ -58,6 +62,11 @@ spec names have ".coffee" appended to them, e.g., [name].spec.coffee
 
 I've even written the tape tests in CoffeeScript to see what that's like:
 
+
+    npm run-script tape-coffee
+    
+  or
+    
     coffee ./test/tape-test.coffee
 
     
@@ -132,7 +141,8 @@ Example using *tape* test written in *coffeescript*:
         t.notEqual(attr, 'should not see this')
 
       , { attr: 'ok', t: t }
-  
+
+
 footgun
 -------
 
@@ -141,6 +151,19 @@ will be necessary at some point, (as with using eval()).  I've added simple
 throw-error tests to find which engines return which helpful messages.
 
 
+work-in-progress
+----------------
+
+If you dig around you'll find another set of tests for an emerging scope injection 
+utility - you can run the tests at    
+    
+    npm run-script scope
+
+  or 
+  
+    node ./test/scope-injection-test.js
+    
+    
 first success
 -------------
 Just noting for the record:
@@ -156,3 +179,4 @@ Just noting for the record:
 + runInNewContext, runInThisContext methods added; runInContext refactored 4 OCT
 + CoffeeScript test with jasmine-node added 6 OCT
 + tape test written in CoffeeScript test added 7 OCT
++ scope injection tests started 21 OCT
