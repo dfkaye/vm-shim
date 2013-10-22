@@ -15,6 +15,7 @@
     "url": "git://github.com/dfkaye/vm-shim.git"
   },
   "scripts": {
-    "test": "node ./test/tape-test.js"
+    "test": "node ./test/tape-test.js",
+    "scope": "node ./test/scope-injection-test.js"
   }
 }
