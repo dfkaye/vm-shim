@@ -144,7 +144,7 @@ describe 'runInNewContext', ->
       
         ), { expect: expect }
     
-      expect(typeof vm).toBeDefined('undefined')
+      expect(typeof vm).toBeDefined()
 
       
       
