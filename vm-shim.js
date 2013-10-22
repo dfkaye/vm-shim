@@ -44,7 +44,7 @@
     
     // shadow out the main global
     context.global = new F;
-    
+
     return runInContext(src, context/*, filename*/)
   }
 

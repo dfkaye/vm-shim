@@ -1,4 +1,4 @@
-// vm-shim node-test
+// vm-shim tape-test
 var test = require('tape');
 var vm = require('../vm-shim.js');
 
