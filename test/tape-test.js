@@ -29,6 +29,19 @@ test('context not leaked', function (t) {
   }); 
 });
 
+test('passing require', function (t) {
+  
+  t.plan(1);
+  
+  vm.runInContext(function() {
+  
+    var junk = require('./junk-drawer.js');
+    
+    t.equal('junk drawer', junk.name, 'should find junk drawer');
+    
+  }, { require: require,  t: t });
+});
+
 test('string property', function (t) {
 
   t.plan(1);

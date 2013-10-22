@@ -29,7 +29,20 @@ test 'context not leaked', (t) ->
   vm.runInContext "t.ok(!context)"
     , { t: t }
 
+    
+test 'passing require', (t) ->
   
+  t.plan(1)
+  
+  vm.runInContext ->
+  
+      junk = require './junk-drawer.js'
+      
+      t.equal('junk drawer', junk.name, 'should find junk drawer')
+      
+    , { require: require,  t: t }
+
+
 test 'string property', (t) ->
 
   t.plan(1)

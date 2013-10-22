@@ -11,6 +11,16 @@ describe 'smoke test', ->
       
 describe 'runInContext', ->
 
+  it 'passing require should work', ->
+   
+    vm.runInContext ->
+    
+        junk = require('./junk-drawer.js')
+        expect(junk.name).toBe('junk drawer')
+        
+      , { require: require,  expect: expect }
+  
+  
   it 'should find string', ->
   
     vm.runInContext "expect(value).toBe(true)", { 
