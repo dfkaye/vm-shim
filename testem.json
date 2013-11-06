@@ -1,0 +1,20 @@
+{
+  "framework": "jasmine2",
+  "src_files" : [
+    "vm-shim.js"
+  ],
+  "launchers": {
+    "jasmine-node": {
+      "command": "jasmine-node --coffee --verbose ./test/node.spec.coffee"
+    },
+    "tape-coffee" : {
+      "command": "coffee ./test/tape-test.coffee"
+    },
+    "scope-test" : {
+      "command" :"node ./test/scope-injection-test.js"
+    },
+    "scope-spec" : {
+      "command" :"jasmine-node --verbose ./test/scope.spec.js"
+    }    
+  }  
+}

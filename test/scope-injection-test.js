@@ -1,30 +1,11 @@
 // scope-injection-test.js
 
-// vm-shim tape-test
 var test = require('tape');
+
 var vm = require('../vm-shim.js');
 
-/*** FIXTURES ***/
 
-var sut = (function(){
-  
-  var pValue = 444;
-  var pObject = { id: 'invisible man' };
-
-  function pFunc() {
-    return true;
-  }
-
-  function f() {
-    return pFunc();
-  }
-  
-  return f;
-}());
-
-
-
-var mock = function (fn, alias) {
+function mock(fn, alias) {
 
   var source = fn.toString();
   
@@ -33,79 +14,183 @@ var mock = function (fn, alias) {
   }
   
   return {
-    source : source,
+    source : function () {
+      return source;
+    },
     inject : function (key, value) {
-      this.source = this.source.replace(key, value)
+      source = source.replace(key, value)
       return this;
     },
-    invoke : function (fn) {
+    invoke : function (fn, context) {
       fn = !fn ? '' : fn.toString();
-      return this.source + ';\n' + '(' + fn + '());';
+      vm.runInNewContext(source + ';\n' + '(' + fn + '());', context);
+      return this;
     }
   }
 };
+
+
+
+/*** FIXTURES ***/
+
+var fixture = (function(){
+  
+  var pValue = 444;
+  
+  var pObject = { id: 'invisible man' };
+
+  function pFunc() {
+    return 'pFuncified';
+  }
+
+  function fn(type) {
+  
+    var which = (type || '').toLowerCase();
+    
+    if (which == 'value') return pValue;
+    if (which == 'object') return pObject;
+      
+    return pFunc();
+  }
+  
+  return fn;
+}());
+
 
 
 /*** TESTS ***/
 
 test('fixtures', function (t) {
 
-  t.plan(4);
+  t.plan(8);
   
-  t.equal(typeof sut, 'function', 'sut should be a function'); 
+  t.equal(typeof fixture, 'function', 'fixture should be a function'); 
   t.equal(typeof mock, 'function', 'mock should be a function');
-  t.equal(typeof mock(sut).inject, 'function', 'inject should be a function');
-  t.equal(sut(), true, 'sut() should return true');
+  t.equal(typeof mock(fixture).source, 'function', 'source should be a function');
+  t.equal(typeof mock(fixture).inject, 'function', 'inject should be a function');
+  t.equal(typeof mock(fixture).invoke, 'function', 'invoke should be a function');
+
+  t.equal(fixture(), 'pFuncified', 'fixture() should return \'pFuncified\'');
+  t.equal(fixture('value'), 444, 'fixture(\'value\') should return \'pValue\' of 444');
+  t.equal(fixture('object').id, 'invisible man', 'fixture(\'object\') should return \'pObject\' with id');
 });
 
 test('inject', function (t) {
 
   t.plan(4);
 
-  var s = mock(sut, 'sut');
+  var s = mock(fixture, 'fixture');
   
-  t.equal(s.source.indexOf('function sut('), 0, 'mock should rename fn with alias');
+  t.equal(s.source().indexOf('function fixture('), 0, 'mock should rename fn with alias');
   t.equal(s.inject('', ''), s, 'inject should return source holder');
   
-  t.ok(s.source.indexOf('return pFunc()') != -1, 'should contain pFunc');
+  t.ok(s.source().indexOf('return pFunc()') != -1, 'should contain pFunc');
   
   s.inject('pFunc', 'mockFunc');
   
-  t.ok(s.source.indexOf('return mockFunc()') != -1, 'should contain mockFunc');
+  t.ok(s.source().indexOf('return mockFunc()') != -1, 'should contain mockFunc');
   
 });
 
 test('invoke', function (t) {
 
   t.plan(4);
+
   
+  // beforeEach
   var mockFunc = function () {
-    return false;
+    return 'mockified';
   };
-  
-  var s = mock(sut, 'sut');
- 
+  var s = mock(fixture, 'fixture');
   s.inject('pFunc', 'mockFunc');
   
   
-  var inlineSource = s.source + ';t.equal(false, sut(), \'inline source should return false instead of true\')';
+  var inlineSource = s.source() + ';t.equal(fixture(), \'mockified\', \'inline source should return \"mockified\" instead of true\')';
   vm.runInContext(inlineSource, { mockFunc: mockFunc, t: t });
+  
+  function standalone() {
+    t.equal(fixture(), 'mockified', 'standalone should return \'mockified\' instead of true');
+  }
+  s.invoke(standalone, { mockFunc: mockFunc, t: t });
+
+  s.invoke(function() {
+    t.equal(fixture(), 'mockified', 'compressed should return \'mockified\' instead of true')
+  }, { mockFunc: mockFunc, t: t });
+
+  var wrapped = s.invoke(function() {
+    t.equal(fixture(), 'mockified', 'wrapped should return \'mockified\' instead of true')
+  }, { mockFunc: mockFunc, t: t });
+});
+
+test('invoke with param \'value\'', function (t) {
+
+  t.plan(4);
+  
+  
+  // beforeEach
+  var mockValue = 777;
+  var s = mock(fixture, 'fixture');
+  s.inject('pValue', 'mockValue');
+  
+
+  var inlineSource = s.source() + ';t.equal(fixture(\'value\'), 777, \'inline source should return 777 instead of 444\')';
+  vm.runInContext(inlineSource, { mockValue: mockValue, t: t });
+  
+  function standalone() {
+    t.equal(fixture('value'), 777, 'standalone should return 777 instead of 444');
+  }
+  s.invoke(standalone, { mockValue: mockValue, t: t });
+  
+  s.invoke(function() {
+    t.equal(fixture('value'), 777, 'compressed source should return 777 instead of 444')
+  }, { mockValue: mockValue, t: t });
+  
+  var wrapped = s.invoke(function() {
+    t.equal(fixture('value'), 777, 'wrapped source should return 777 instead of 444');
+  }, { mockValue: mockValue, t: t });
+  
+});
+
+test('invoke with param \'object\'', function (t) {
+
+  t.plan(4);
+  
+  
+  //beforeEach
+  var mockObj = { id: 'mock-invisible-man' };
+  var s = mock(fixture, 'fixture');
+  s.inject('pObject', 'mockObj');
+  
+
+  var inlineSource = s.source() + ';t.equal(fixture(\'object\').id, \'mock-invisible-man\', \'inline source should return "mock-invisible-man"\')';
+  vm.runInContext(inlineSource, { mockObj: mockObj, t: t });
   
   
   function standalone() {
-    t.equal(false, sut(), 'standalone function should return false instead of true');
+    t.equal(fixture('object').id, 'mock-invisible-man', 'standalone should return \'mock-invisible-man\'');
   }
-  vm.runInContext(s.invoke(standalone), { mockFunc: mockFunc, t: t });
+  s.invoke(standalone, { mockObj: mockObj, t: t });
   
   
   var wrapped = s.invoke(function() {
-    t.equal(false, sut(), 'wrapped source should return false instead of true');
-  });
-  vm.runInContext(wrapped, { mockFunc: mockFunc, t: t });
+    t.equal(fixture('object').id, 'mock-invisible-man', 'wrapped source should return \'mock-invisible-man\'');
+  }, { mockObj: mockObj, t: t });
   
 
-  vm.runInContext(s.invoke(function() {
-    t.equal(false, sut(), 'compressed source should return false instead of true')
-  }), { mockFunc: mockFunc, t: t });
+  s.invoke(function() {
+    t.equal(fixture('object').id, 'mock-invisible-man', 'compressed source should return \'mock-invisible-man\'')
+  }, { mockObj: mockObj, t: t });
+
+});
+
+test('chained use', function(t) {
+
+  t.plan(1);
+  
+  mock(fixture, 'fixture')
+  .inject('pObject', 'mockObj')
+  .invoke(function() {
+    t.equal(fixture('object').id, 'chained-invisible-man', 'chained use should return \'chained-invisible-man\'')
+  }, { mockObj: { id: 'chained-invisible-man' }, t: t })
 
 });
