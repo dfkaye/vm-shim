@@ -4,7 +4,6 @@ var test = require('tape');
 
 var vm = require('../vm-shim.js');
 
-
 function mock(fn, alias) {
 
   var source = fn.toString();

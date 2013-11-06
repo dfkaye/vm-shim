@@ -19,9 +19,10 @@ function mock(fn, alias) {
       source = source.replace(key, value)
       return this;
     },
-    invoke : function (fn) {
+    invoke : function (fn, context) {
       fn = !fn ? '' : fn.toString();
-      return source + ';\n' + '(' + fn + '());';
+      vm.runInNewContext(source + ';\n' + '(' + fn + '());', context);
+      return this;
     }
   }
 };
