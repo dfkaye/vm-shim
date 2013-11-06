@@ -176,7 +176,8 @@ Just noting for the record:
   + Tape tests added 20 SEPT.
   + Jasmine tests/page added 20 SEPT.
 + Error, and leakage tests added 21 SEPT.
-+ runInNewContext, runInThisContext methods added; runInContext refactored 4 OCT
++ runInNewContext, runInThisContext methods added; runInContext refactored 4 OCT 2013
 + CoffeeScript test with jasmine-node added 6 OCT
 + tape test written in CoffeeScript test added 7 OCT
 + scope injection tests started 21 OCT
++ scope injection: spec started, tests updated, testem.json added 6 NOV 2013
