@@ -78,8 +78,8 @@ Using @pivotallabs'
 <a href='http://jasmine.github.io/2.0/introduction.html'>jasmine-2.0.0</a> for 
 the browser suite.
 
-__The *jasmine2* test page is viewable on 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test/jasmine2-test.html' 
+__The *jasmine2* browser test page is viewable on 
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser-test.html' 
    target='_new' title='opens in new tab or window'>rawgithub</a>.__
   
 Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to 
