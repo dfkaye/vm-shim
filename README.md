@@ -1,24 +1,78 @@
 vm-shim
 =======
 
-Wan attempt to reproduce/polyfill/infill the node.js 
-<code>vm#runIn<Some?>Context()</code> methods in browser ~ no guarantees.
+This began as a wan attempt to reproduce/polyfill/infill the Node.JS 
+<code>vm#runIn<Some?>Context()</code> methods in browsers. It has transformed 
+into this current tan muscular self-assured and smiling project before you.
+
+I'd wanted to show that shimming in the browser really could be done directly, 
+partly to avoid  
+[vm-browserify](https://github.com/substack/vm-browserify) which uses iframes to 
+create and clone globals and contexts, and partly to side-step Node.js's 
+*contra-normative* implementations of `runInContext` methods.
+
+It's actually a "why didn't I think of that?" solution to problems such as -
+
++ why don't vm methods accept *functions* as arguments, not just strings?
++ why don't eval() and Function() accept *functions* as arguments?
++ why do eval() and Function() inexcusably leak un-var'd symbols to the global 
+scope, in browser & node.js environments?
++ how can we inspect items defined in closures?
++ how can we override (or mock) them?
+
+
+methods
+-------
 
 + <code>vm#runInContext(code, context)</code>
 + <code>vm#runInNewContext(code, context)</code>
 + <code>vm#runInThisContext(code)</code>
 
-justify
--------
 
-Goal here is to get Node.js's <code>vm.runInContext()</code> methods to run in 
-the browser, partly to show that it really can be done, partly as a potential 
-replacement for browserify's 
-[vm-browserify](https://github.com/substack/vm-browserify) which uses iframes to 
-create and clone globals and contexts.
+work-in-progress
+----------------
+
+I had been looking for a way to use *reflection* in closures, due to the side-
+effects from another exchange of rants with Phil Walton.  But then I realized we 
+only need to mock certain items in closures at any time - not just inspect them 
+during tests. So I've come up with a scope injection utility for that which 
+depends on `runInNewContext`.  This will be added to the vm-shim API when "done"
+
+
+node tests
+----------
+
+Using Misko Hevery's [jasmine-node](https://github.com/mhevery/jasmine-node) to 
+run command line tests on node (even though this project initially aimed at a 
+browser shim).
+
+The `package.json` file defines three test script commands to run the tests via 
+jasmine-node without the browsers:
+
+    npm test 
+    # => jasmine-node --verbose ./test/suite.spec.js
+
+    npm run-script test-vm 
+    # => jasmine-node --verbose ./test/vm-shim.spec.js
+    
+    npm run-script test-scope
+    # => jasmine-node --verbose ./test/scope.spec.js
 
 browser tests
 -------------
+
+Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to drive tests in 
+multiple browsers for jasmine-2.0.0 (see how to 
+[hack testem for jasmine 2](https://github.com/dfkaye/testem-jasmine2)), as well 
+as jasmine-node.  The following command uses a custom launcher for jasmine-node 
+in testem:
+
+    testem -l j
+  
+rawgithub page
+--------------
+
+TODO - refactor to test page usable in testem and/or rawgithub -
 
 Using @pivotallabs' <a href='https://github.com/pivotal/jasmine'>jasmine</a> for the 
 browser suite.
@@ -27,148 +81,89 @@ The *jasmine* test page is viewable on
 <a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html' 
    target='_new' title='opens in new tab or window'>
   rawgithub</a>.
-
-node tests
-----------
-
-Out of curiosity, I've included a test suite to detect possible issues on Node, 
-using @substack's <a href='https://github.com/substack/tape'>tape</a> module. 
-
-Run these with:
-
-    cd ./vm-shim
-    npm test
   
-or 
   
-    node ./test/node-test.js
+npm
+---
 
+    TODO 
     
-CoffeeScript tests
-------------------
 
-As a further learning exercise, I've created a node.spec.coffee test file and 
-run it with jasmine-node.  
-
-    npm run-script jasmine-coffee
-    
-  or
-
-    jasmine-node --coffee --verbose ./test/node.spec.coffee
-
-jasmine-node expects your tests to be ".spec" files; and that your coffeescript 
-spec names have ".coffee" appended to them, e.g., [name].spec.coffee
-
-
-I've even written the tape tests in CoffeeScript to see what that's like:
-
-
-    npm run-script tape-coffee
-    
-  or
-    
-    coffee ./test/tape-test.coffee
-
-    
 implementation
 --------------
 
-First-cut implementation is <code>vm.runInContext(code, context)</code>. The 
-Function() constructor is at the core. The *code* param may be either a string 
-or a function. The *context* param is a simple object with key-value mappings. 
-For any key on the context, a new *var* for that key is prefixed to the code. The
-code is passed in to Function() so that the keynames can't leak outside the new 
-function's scope.
+TODO - update first paragraph -
 
-Currently the unit tests rely on the context param to contain a reference to the 
-test's *t* object (when using *tape*), or the *expect* object (when running 
-*jasmine*).
+First-cut implementation is `vm.runInContext(code, context)`. The `Function()` 
+constructor is at the core.  The *code* param may be either a string or a 
+function.  The *context* param is a simple object with key-value mappings.  For 
+any key on the context, a new *var* for that key is prefixed to the code.  The 
+code is passed in to `Function()` so that the keynames can't leak outside the 
+new function's scope.  [8 Nov 2013] As a final touch, `with()` is used on the 
+context so any modifications are captured.
 
-Example using *tape*:
+Refactored [8 Nov 2013]: a lot of little things involved - biggest is that 
+`runInThisContext` now uses `eval()` internally, and the other two use `with()` 
+inside of `Function()`.
 
-    test("overrides external scope vars with context attrs", function(t) {
+[10 Nov] Having discovered that eval() leaks globals (!?!) if symbols are not 
+var'd, all methods rely on helper methods to scrape EVERY global added by its 
+internal `eval()` (or `Function()`) call.  
 
-      t.plan(1);
 
-      var attr = "shouldn't see this";
-       
-      vm.runInContext(function(){
-      
-        t.equal(attr, 'ok');
-        t.notEqual(attr, 'should not see this');
+example tests
+-------------
 
-      }, { attr: 'ok', t: t });
-    });
+The unit tests demonstrate how `runInContext` and `runInNewContext` methods work 
+by passing a `context` param containing a reference to the test's expectation 
+object or function.
 
-Example using *jasmine*:
-
+Example runInContext test passes the `expect` function via context argument:
+    
     it("overrides external scope vars with context attrs", function() {
 
       var attr = "shouldn't see this";
-
+      
+      var context = {
+        attr: 'ok', 
+        expect: expect  // <-- pass expect here
+      };
+      
       vm.runInContext(function(){
-
         expect(attr).toBe('ok');
         expect(attr).not.toBe('should not see this');
-
-      }, { attr: 'ok', expect: expect });
+      }, context); 
+      
     });
 
-Example using *jasmine-node --coffee*:
+Example runInNewContext test to verify context is returned:
 
-    it 'overrides external scope vars with context attrs', ->
-
-      attr = 'should not see this'
+    it('should return context object', function () {
+      var context = { name: 'test' };
       
-      vm.runInContext (->
-        
-        expect(attr).toBe('ok')
-        expect(attr).not.toBe('should not see this')
-        
-      ), { attr: 'ok', expect: expect }
-    
-Example using *tape* test written in *coffeescript*:
-
-    test 'overrides external scope vars with context attrs', (t) ->
-
-      t.plan(2)
-
-      attr = "shouldn't see this"
-       
-      vm.runInContext ->
+      var result = vm.runInNewContext('', context);
       
-        t.equal(attr, 'ok')
-        t.notEqual(attr, 'should not see this')
-
-      , { attr: 'ok', t: t }
-
-
-footgun
--------
-
-Because __JavaScript is a footgun__ where Function() is involved, debugger support 
-will be necessary at some point, (as with using eval()).  I've added simple 
-throw-error tests to find which engines return which helpful messages.
-
-
-work-in-progress
-----------------
-
-If you dig around you'll find another set of tests for an emerging scope injection 
-utility - you can run the tests at    
+      expect(result).toBe(context);
+      expect(result.name).toBe('test');
+    });
     
-    npm run-script scope
-
-  or 
-  
-    node ./test/scope-injection-test.js
+Example runInThisContext test to verify accidental is not placed on global scope:
     
+    it("should not leak accidental (un-var'd) globals", function() {
+    
+      vm.runInThisContext(function(){
+        accidental = 'defined';
+      });
+      
+      expect(global.accidental).not.toBeDefined();
+    });
+
     
 first success
 -------------
 Just noting for the record:
 
-+ This idea emerged late at night 17 SEPT 2013 
++ Original idea emerged late at night 17 SEPT 2013 
 + First implemented with rawgithub approach 18 SEPT, 
 + Full success including objects as properties of the context argument 19 SEPT.
 + Breaking the usual TDD procedure:
@@ -181,3 +176,18 @@ Just noting for the record:
 + tape test written in CoffeeScript test added 7 OCT
 + scope injection tests started 21 OCT
 + scope injection: spec started, tests updated, testem.json added 6 NOV 2013
++ massive refactoring 8 NOV 2013
+  - certain cases were just wrong (needed 'eval()' for 'runInThisContext()', e.g.)
+  - new/completed bdd specs for both vm-shim and scope mocking (temp name is 'mock')
++ last global leakage fixed 10 NOV
++ anger and disbelief over blatantly wrong implementations of eval() and 
+Function() mounting...
+
+TODO
+----
+- need rawgithub viewable test page that also works with testem (coming up)
+- ready to junk the tape and coffeescript tests
+- move `junk-drawer` from afterthought to feature
+- npm
+
+  
