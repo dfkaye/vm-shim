@@ -43,13 +43,10 @@
     // Yep ~ using `with` ~ who said you can't use `with` ~ WHO THE F*** SAID THAT    
     code += 'with(context){' + src + '}';
 
-    var arr = keys(global);
-    
-    Function('context', code).call(null, context);
-    
-    scrub(arr);
-
-    return context;
+    return sandbox(function () {
+      Function('context', code).call(null, context);
+      return context;
+    });
   }
   
   // src may be a string or a function
@@ -79,35 +76,33 @@
       code = code.substring(code.indexOf('{') + 1, code.lastIndexOf('}') - 1);//.replace(/^\s*/, '');
     }
 
-    // new shim coming up:
-    // Unbelievably, eval() & Function() don't take functions as args; 
-    // eval() leaks un-var'd symbols in browser & node.js
-    // thus, defeating the purpose.
-    
-    var arr = keys(global);
-    var result = eval(code);
-    
-    scrub(arr);
-    
-    return result;
+    return sandbox(function () {
+      return eval(code);
+    });
   }
   
-  // helpers for scrubbing "accidental" un-var'd globals from eval()
+  // helper for scrubbing "accidental" un-var'd globals from eval()
+  // new shim coming up:
+  // Unbelievably, eval() & Function() don't take functions as args; 
+  // eval() leaks un-var'd symbols in browser & node.js
+  // thus, defeating the purpose.
+  function sandbox(fn) {
   
-  function keys(o) {
-    var res = {};
-    for (var k in o) {
-      res[k] = k;
-    }
-    return res;
-  };
-  
-  function scrub(arr) {
+    var keys = {};
+    
     for (var k in global) {
-      if (!(k in arr)) {
+      keys[k] = k;
+    }
+    
+    var result = fn();
+    
+    for (var k in global) {
+      if (!(k in keys)) {
         delete global[k];
       }
     }
+    
+    return result;
   }
   
 }());
