@@ -38,14 +38,17 @@ methods
 + <code>vm#mockScope(code) #source #inject #invoke()</code>
 
 
-work-in-progress
-----------------
+mock-scope := work-in-progress
+------------------------------
 
 I had been looking for a way to use *reflection* in closures, due to the side-
-effects from another exchange of rants with Phil Walton.  But then I realized we 
-only need to mock certain items in closures at any time - not just inspect them 
-during tests. So I've come up with a scope injection utility for that which 
-depends on `runInNewContext`.  This will be added to the vm-shim API when "done"
+effects from another exchange of rants with Phil Walton (@philwalton) 
+(see [Mocking - not testing - private functions](https://gist.github.com/dfkaye/5987716)).  
+
+But I realized we only need to mock certain items in closures at any time, not 
+all of them, and not just inspect them during tests.  So I've come up with a 
+mock-scope injection utility for that which depends on `runInNewContext`.  This 
+will be added to the vm-shim API when "done"
 
 
 node tests
