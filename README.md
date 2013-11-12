@@ -72,13 +72,12 @@ in testem:
 rawgithub page
 --------------
 
-TODO - refactor to test page usable in testem and/or rawgithub -
-
-Using @pivotallabs' <a href='https://github.com/pivotal/jasmine'>jasmine</a> for the 
+Using @pivotallabs' 
+<a href='http://jasmine.github.io/2.0/introduction.html'>jasmine 2.0</a> for the 
 browser suite.
 
-The *jasmine* test page is viewable on 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser/SpecRunner.html' 
+The *jasmine2* test page is viewable on 
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test/jasmine2-test.html' 
    target='_new' title='opens in new tab or window'>
   rawgithub</a>.
   
