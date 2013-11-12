@@ -1,21 +1,29 @@
 vm-shim
 =======
 
+TODO
+----
+- update implementation paragraph
+- finalize `mockScope`
+- move `junk-drawer` from afterthought to feature
+- npm publish
+
+
 This began as a wan attempt to reproduce/polyfill/infill the Node.JS 
 <code>vm#runIn<Some?>Context()</code> methods in browsers. It has transformed 
-into this current tan muscular self-assured and smiling project before you.
+into the present tan muscular self-assured and smiling project before you.
 
-I'd wanted to show that shimming in the browser really could be done directly, 
-partly to avoid  
-[vm-browserify](https://github.com/substack/vm-browserify) which uses iframes to 
-create and clone globals and contexts, and partly to side-step Node.js's 
+I'd wanted to show that shimming `vm` in the browser really could be done 
+directly, partly to avoid iframes (which 
+[vm-browserify](https://github.com/substack/vm-browserify) uses) to create and 
+clone globals and contexts, and partly to side-step Node.js's 
 *contra-normative* implementations of `runInContext` methods.
 
 It's actually a "why didn't I think of that?" solution to problems such as -
 
-+ why don't vm methods accept *functions* as arguments, not just strings?
-+ why don't eval() and Function() accept *functions* as arguments?
-+ why do eval() and Function() inexcusably leak un-var'd symbols to the global 
++ why don't `vm` methods accept *functions* as arguments, not just strings?
++ why don't `eval()` and `Function()` accept *functions* as arguments?
++ why do `eval()` and `Function()` inexcusably leak un-var'd symbols to the global 
 scope, in browser & node.js environments?
 + how can we inspect items defined in closures?
 + how can we override (or mock) them?
@@ -27,6 +35,7 @@ methods
 + <code>vm#runInContext(code, context)</code>
 + <code>vm#runInNewContext(code, context)</code>
 + <code>vm#runInThisContext(code)</code>
++ <code>vm#mockScope(code) #source #inject #invoke()</code>
 
 
 work-in-progress
@@ -58,35 +67,28 @@ jasmine-node without the browsers:
     npm run-script test-scope
     # => jasmine-node --verbose ./test/scope.spec.js
 
+
 browser tests
 -------------
 
-Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to drive tests in 
-multiple browsers for jasmine-2.0.0 (see how to 
-[hack testem for jasmine 2](https://github.com/dfkaye/testem-jasmine2)), as well 
-as jasmine-node.  The following command uses a custom launcher for jasmine-node 
-in testem:
-
-    testem -l j
-  
-rawgithub page
---------------
-
 Using @pivotallabs' 
-<a href='http://jasmine.github.io/2.0/introduction.html'>jasmine 2.0</a> for the 
+<a href='http://jasmine.github.io/2.0/introduction.html'>jasmine-2.0.0</a> for the 
 browser suite.
 
 The *jasmine2* test page is viewable on 
 <a href='//rawgithub.com/dfkaye/vm-shim/master/test/jasmine2-test.html' 
-   target='_new' title='opens in new tab or window'>
-  rawgithub</a>.
+   target='_new' title='opens in new tab or window'>rawgithub</a>.
   
-  
-npm
----
+Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to 
+drive tests in multiple browsers for jasmine-2.0.0 (see how to 
+[hack testem for jasmine 2](https://github.com/dfkaye/testem-jasmine2)), as well 
+as jasmine-node.  The `testem.json` file uses the standalone test page above, 
+and also uses a custom launcher for jasmine-node (v 1.3.1).
 
-    TODO 
-    
+View both types at the console by running:
+
+    testem -l j
+  
 
 implementation
 --------------
@@ -177,16 +179,8 @@ Just noting for the record:
 + scope injection: spec started, tests updated, testem.json added 6 NOV 2013
 + massive refactoring 8 NOV 2013
   - certain cases were just wrong (needed 'eval()' for 'runInThisContext()', e.g.)
-  - new/completed bdd specs for both vm-shim and scope mocking (temp name is 'mock')
+  - new/completed bdd specs for both vm-shim and scope mocking (temp name is 'mockScope')
 + last global leakage fixed 10 NOV
-+ anger and disbelief over blatantly wrong implementations of eval() and 
-Function() mounting...
-
-TODO
-----
-- need rawgithub viewable test page that also works with testem (coming up)
-- ready to junk the tape and coffeescript tests
-- move `junk-drawer` from afterthought to feature
-- npm
-
-  
++ disbelief over global-leaking implementation of eval() and Function()...
++ rawgithub-viewable test page that also works with testem
+ 
