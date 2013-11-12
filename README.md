@@ -184,6 +184,6 @@ Just noting for the record:
   - certain cases were just wrong (needed 'eval()' for 'runInThisContext()', e.g.)
   - new/completed bdd specs for both vm-shim and scope mocking (temp name is 'mockScope')
 + last global leakage fixed 10 NOV
-+ disbelief over global-leaking implementation of eval() and Function()...
-+ rawgithub-viewable test page that also works with testem
++ deleted CoffeeScript and tape tests (fun but extra work for now) 11 NOV
++ rawgithub-viewable test page that also works with testem 12 NOV
  
