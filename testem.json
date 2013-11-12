@@ -4,6 +4,7 @@
     "vm-shim.js",
     "./test/**.spec.js"
   ],
+  "test_page" : "./test/jasmine2-test.html",
   "launchers": {
     "j" : {
       "command": "jasmine-node --verbose ./test/suite.spec.js"
