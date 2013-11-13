@@ -110,7 +110,7 @@ describe('vm-shim', function () {
            * - IE 'barf' is undefined
            * - Chrome, Firefox: barf is not defined
            */
-          var errorMatcher = /\'?barf\'? is (un|not )defined/;
+          var errorMatcher = /(Undefined variable: barf)|(\'barf\' is undefined)|(barf is not defined)/;
           
           function throwIt() { barf }
         
