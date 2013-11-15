@@ -79,7 +79,7 @@ Using @pivotallabs'
 the browser suite.
 
 __The *jasmine2* browser test page is viewable on 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser-test.html' 
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser-suite.html' 
    target='_new' title='opens in new tab or window'>rawgithub</a>.__
   
 Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to 

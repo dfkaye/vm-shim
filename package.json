@@ -16,7 +16,7 @@
     "url": "git://github.com/dfkaye/vm-shim.git"
   },
   "scripts": {
-    "test": "jasmine-node --verbose ./test/suite.spec.js",
+    "test": "jasmine-node --verbose ./test/node-suite.spec.js",
     "test-vm": "jasmine-node --verbose ./test/vm-shim.spec.js",
     "test-scope": "jasmine-node --verbose ./test/scope.spec.js"
   }

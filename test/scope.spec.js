@@ -33,6 +33,70 @@ function mockScope(fn, alias) {
 };
 
 
+/***
+
+// ALTERNATE IMPL TO BE MOVED OUT:
+
+// function.parse
+
+Function.prototype.parse = parse;
+function parse(fn) {
+  fn = fn || this
+  var res = {}
+  var fs = fn.toString()
+  try {
+    res.source = fs;
+    res.arguments = fs.substring(fs.indexOf('(') + 1, fs.indexOf(')')).split(',')   
+    res.body = fs.substring(fs.indexOf('{') + 1, fs.lastIndexOf('}') - 1)
+    res.returns = fs.match(/[^\/^\]]return ([^\n]*)/g)
+  } catch (error) {
+    res.err = error
+  }
+  return res;
+}
+
+// test self
+var p = Function.prototype.parse.parse()
+console.log('arguments: ' + p.arguments)
+console.log('body: \n' + p.body)
+console.log('returns: \n' + p.returns)
+
+// test subject
+var fn = (function(){
+  
+  var pValue = 444;
+  
+  var pObject = { id: 'invisible man' };
+
+  function pFunc() {
+    return 'pFuncified';
+  }
+
+  function fn(type) {
+  
+    var which = (type || '').toLowerCase();
+    
+    if (which == 'value') return pValue;
+    if (which == 'object') return pObject;
+      
+    return pFunc();
+  }
+  
+  return fn;
+}());
+
+var res = fn.parse()
+console.log('arguments: ' + res.arguments)
+console.log('body: \n' + res.body)
+console.log('returns: \n' + res.returns)
+console.log(fn('did', 'you', 'know? '))
+console.log(fn('didn\'t you', 'know? '))
+console.log(fn('don\'t you know? '))
+console.log(fn(''))
+
+***/
+
+
   /*** FIXTURES ***/
 
 var fixture = (function(){

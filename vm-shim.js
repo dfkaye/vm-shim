@@ -81,11 +81,11 @@
     });
   }
   
-  // helper for scrubbing "accidental" un-var'd globals from eval()
-  // new shim coming up:
+  // sandbox is a helper function for scrubbing "accidental" un-var'd globals from eval()
   // Unbelievably, eval() & Function() don't take functions as args; 
-  // eval() leaks un-var'd symbols in browser & node.js
-  // thus, defeating the purpose.
+  // eval() leaks un-var'd symbols in browser & node.js;
+  // indirect eval() leaks ALL vars globally, 
+  //  i.e., where var e = eval; e('var a = 7'); 'a' becomes global, thus, defeating the purpose.
   function sandbox(fn) {
   
     var keys = {};
