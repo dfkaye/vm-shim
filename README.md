@@ -1,16 +1,8 @@
 vm-shim
 =======
 
-TODO
-----
-- update implementation paragraph
-- finalize `mockScope`
-- move `junk-drawer` from afterthought to feature
-- npm publish
-
-
 This began as a wan attempt to reproduce/polyfill/infill the Node.JS 
-<code>vm#runIn<Some?>Context()</code> methods in browsers. It has transformed 
+`vm#runIn<Some?>Context()` methods in browsers. It has transformed 
 into the present tan muscular self-assured and smiling project before you.
 
 I'd wanted to show that shimming `vm` in the browser really could be done 
@@ -23,32 +15,26 @@ It's actually a "why didn't I think of that?" solution to problems such as -
 
 + why don't `vm` methods accept *functions* as arguments, not just strings?
 + why don't `eval()` and `Function()` accept *functions* as arguments?
-+ why do `eval()` and `Function()` inexcusably leak un-var'd symbols to the global 
-scope, in browser & node.js environments?
++ why do `eval()` and `Function()` leak un-var'd symbols to the global scope, in 
+    browser & node.js environments?
 + how can we inspect items defined in closures?
 + how can we override (or mock) them?
 
 
-methods
--------
+methods provided (so far)
+----------------
 
-+ <code>vm#runInContext(code, context)</code>
-+ <code>vm#runInNewContext(code, context)</code>
-+ <code>vm#runInThisContext(code)</code>
-+ <code>vm#mockScope(code) #source #inject #invoke()</code>
++ `vm#runInContext(code, context)`
++ `vm#runInNewContext(code, context)`
++ `vm#runInThisContext(code)`
 
+not provided (yet)
+------------
 
-mock-scope := work-in-progress
-------------------------------
-
-I had been looking for a way to use *reflection* in closures, due to the side-
-effects from another exchange of rants with Phil Walton (@philwalton) 
-(see [Mocking - not testing - private functions](https://gist.github.com/dfkaye/5987716)).  
-
-But I realized we only need to mock certain items in closures at any time, not 
-all of them, and not just inspect them during tests.  So I've come up with a 
-mock-scope injection utility for that which depends on `runInNewContext`.  This 
-will be added to the vm-shim API when "done"
++ `vm#.createContext`
++ `vm#.createScript`
++ `script.runInThisContext()`
++ `script.runInNewContext([sandbox])`
 
 
 node tests
@@ -64,11 +50,8 @@ jasmine-node without the browsers:
     npm test 
     # => jasmine-node --verbose ./test/suite.spec.js
 
-    npm run-script test-vm 
+    npm run test-vm 
     # => jasmine-node --verbose ./test/vm-shim.spec.js
-    
-    npm run-script test-scope
-    # => jasmine-node --verbose ./test/scope.spec.js
 
 
 browser tests
@@ -88,7 +71,7 @@ drive tests in multiple browsers for jasmine-2.0.0 (see how to
 as jasmine-node.  The `testem.json` file uses the standalone test page above, 
 and also uses a custom launcher for jasmine-node (v 1.3.1).
 
-View both types at the console by running:
+View both test types at the console by running:
 
     testem -l j
   
@@ -96,22 +79,19 @@ View both types at the console by running:
 implementation
 --------------
 
-TODO - update first paragraph -
-
-First-cut implementation is `vm.runInContext(code, context)`. The `Function()` 
-constructor is at the core.  The *code* param may be either a string or a 
-function.  The *context* param is a simple object with key-value mappings.  For 
-any key on the context, a new *var* for that key is prefixed to the code.  The 
-code is passed in to `Function()` so that the keynames can't leak outside the 
-new function's scope.  [8 Nov 2013] As a final touch, `with()` is used on the 
-context so any modifications are captured.
+Starting with `vm.runInContext(code, context)`, the `Function()` constructor is 
+at the core.  The *code* param may be either a string __or a function__.  The 
+*context* param is a simple object with key-value mappings.  For any key on the 
+context, a new *var* for that key is prefixed to the code.  The code is passed 
+in to `Function()` so that the keynames can't leak outside the new function's 
+scope.
 
 Refactored [8 Nov 2013]: a lot of little things involved - biggest is that 
 `runInThisContext` now uses `eval()` internally, and the other two use `with()` 
-inside of `Function()`.
+inside of `Function()`.  Who says you can't use `with()`?
 
 [10 Nov] Having discovered that eval() leaks globals (!?!) if symbols are not 
-var'd, all methods rely on helper methods to scrape EVERY global added by its 
+var'd, all methods rely on a helper method to scrape EVERY global added by its 
 internal `eval()` (or `Function()`) call.  
 
 
@@ -163,7 +143,7 @@ Example runInThisContext test to verify accidental is not placed on global scope
     });
 
     
-first success
+history
 -------------
 Just noting for the record:
 
@@ -186,4 +166,4 @@ Just noting for the record:
 + last global leakage fixed 10 NOV
 + deleted CoffeeScript and tape tests (fun but extra work for now) 11 NOV
 + rawgithub-viewable test page that also works with testem 12 NOV
- 
++ moved mock scope stuff to metafunction project 18 NOV

@@ -15,9 +15,9 @@
   }
   
   vm = {
-    runInContext     : runInContext,
-    runInNewContext  : runInNewContext,
-    runInThisContext : runInThisContext
+    runInContext      : runInContext,
+    runInNewContext   : runInNewContext,
+    runInThisContext  : runInThisContext
   }
 
   if (typeof module != 'undefined') {
@@ -25,6 +25,7 @@
   } else {
     global.vm = vm;
   }
+  
   
   // src may be a string or a function
   // context is a config object of properties to be used as vars inside the new scope
@@ -53,6 +54,8 @@
   // context is a config object of properties to be used as vars inside the new scope  
   function runInNewContext(src, context/*, filename*/) {
 
+    context = context || {};
+    
     // Object.create shim to shadow out the main global
     function F(){}
     F.prototype = (typeof Window != 'undefined' && Window.prototype) || global;
