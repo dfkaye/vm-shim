@@ -1,6 +1,8 @@
 vm-shim
 =======
 
+[![Build Status](https://travis-ci.org/dfkaye/vm-shim.png)](https://travis-ci.org/dfkaye/vm-shim)
+
 This began as a wan attempt to reproduce/polyfill/infill the Node.JS 
 `vm#runIn<Some?>Context()` methods in browsers. It has transformed 
 into the present tan muscular self-assured and smiling project before you.
@@ -20,7 +22,6 @@ It's actually a "why didn't I think of that?" solution to problems such as -
 + how can we inspect items defined in closures?
 + how can we override (or mock) them?
 
-
 methods provided (so far)
 ----------------
 
@@ -36,46 +37,13 @@ not provided (yet)
 + `script.runInThisContext()`
 + `script.runInNewContext([sandbox])`
 
+install
+-------
 
-node tests
-----------
-
-Using Misko Hevery's [jasmine-node](https://github.com/mhevery/jasmine-node) to 
-run command line tests on node (even though this project initially aimed at a 
-browser shim).
-
-The `package.json` file defines three test script commands to run the tests via 
-jasmine-node without the browsers:
-
-    npm test 
-    # => jasmine-node --verbose ./test/suite.spec.js
-
-    npm run test-vm 
-    # => jasmine-node --verbose ./test/vm-shim.spec.js
-
-
-browser tests
--------------
-
-Using @pivotallabs' 
-<a href='http://jasmine.github.io/2.0/introduction.html'>jasmine-2.0.0</a> for 
-the browser suite.
-
-__The *jasmine2* browser test page is viewable on 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser-suite.html' 
-   target='_new' title='opens in new tab or window'>rawgithub</a>.__
-  
-Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to 
-drive tests in multiple browsers for jasmine-2.0.0 (see how to 
-[hack testem for jasmine 2](https://github.com/dfkaye/testem-jasmine2)), as well 
-as jasmine-node.  The `testem.json` file uses the standalone test page above, 
-and also uses a custom launcher for jasmine-node (v 1.3.1).
-
-View both test types at the console by running:
-
-    testem -l j
-  
-
+    npm install vm-shim
+    
+    git clone https://github.com/dfkaye/vm-shim.git    
+     
 implementation
 --------------
 
@@ -94,6 +62,7 @@ inside of `Function()`.  Who says you can't use `with()`?
 var'd, all methods rely on a helper method to scrape EVERY global added by its 
 internal `eval()` (or `Function()`) call.  
 
+[10 Dec]: removed use of `with`.
 
 example tests
 -------------
@@ -142,6 +111,43 @@ Example runInThisContext test to verify accidental is not placed on global scope
       expect(global.accidental).not.toBeDefined();
     });
 
+node tests
+----------
+
+Using Misko Hevery's [jasmine-node](https://github.com/mhevery/jasmine-node) to 
+run command line tests on node (even though this project initially aimed at a 
+browser shim).
+
+The `package.json` file defines three test script commands to run the tests via 
+jasmine-node without the browsers:
+
+    npm test 
+    # => jasmine-node --verbose ./test/suite.spec.js
+
+    npm run test-vm 
+    # => jasmine-node --verbose ./test/vm-shim.spec.js
+
+
+browser tests
+-------------
+
+Using @pivotallabs' 
+<a href='http://jasmine.github.io/2.0/introduction.html'>jasmine-2.0.0</a> for 
+the browser suite.
+
+__The *jasmine2* browser test page is viewable on 
+<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser-suite.html' 
+   target='_new' title='opens in new tab or window'>rawgithub</a>.__
+  
+Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to 
+drive tests in multiple browsers for jasmine-2.0.0 (see how to 
+[hack testem for jasmine 2](https://github.com/dfkaye/testem-jasmine2)), as well 
+as jasmine-node.  The `testem.json` file uses the standalone test page above, 
+and also uses a custom launcher for jasmine-node (v 1.3.1).
+
+View both test types at the console by running:
+
+    testem -l j
     
 history
 -------------
