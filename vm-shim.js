@@ -33,6 +33,7 @@
     
     var code = '';
     
+    // before - set local scope vars from each context property
     for (var key in context) {
       if (context.hasOwnProperty(key)) {
         code += 'var ' + key + ' = context[\'' + key + '\'];\n';
@@ -40,18 +41,24 @@
     }
     
     typeof src == 'string' || (src = '(' + src.toString() + '())');
-
-    // Yep ~ using `with` ~ who said you can't use `with` ~ WHO THE F*** SAID THAT    
-    code += 'with(context){' + src + '}';
-
+    
+    code += src + ';\n';
+    
+    // after - scoop changes back into context
+    for (var key in context) {
+      if (context.hasOwnProperty(key)) {
+        code += 'context[\'' + key + '\'] = ' + key + ';\n';
+      }
+    }
+    
     return sandbox(function () {
       Function('context', code).call(null, context);
       return context;
     });
   }
   
-  // src may be a string or a function
-  // context is a config object of properties to be used as vars inside the new scope  
+  // param src - may be a string or a function
+  // param context - config object of properties to be used as vars inside the new scope  
   function runInNewContext(src, context/*, filename*/) {
 
     context = context || {};
@@ -76,7 +83,7 @@
     
     if (typeof src == 'function') {
       code = src.toString();
-      code = code.substring(code.indexOf('{') + 1, code.lastIndexOf('}') - 1);//.replace(/^\s*/, '');
+      code = code.substring(code.indexOf('{') + 1, code.lastIndexOf('}') - 1);
     }
 
     return sandbox(function () {
@@ -84,11 +91,12 @@
     });
   }
   
-  // sandbox is a helper function for scrubbing "accidental" un-var'd globals from eval()
-  // Unbelievably, eval() & Function() don't take functions as args; 
-  // eval() leaks un-var'd symbols in browser & node.js;
-  // indirect eval() leaks ALL vars globally, 
-  //  i.e., where var e = eval; e('var a = 7'); 'a' becomes global, thus, defeating the purpose.
+  // method sandbox - helper function for scrubbing "accidental" un-var'd globals after 
+  // eval() and Function() calls. 
+  // + Inconveniently, eval() and Function() don't take functions as arguments.  
+  // + eval() leaks un-var'd symbols in browser & node.js.
+  // + indirect eval() leaks ALL vars globally, i.e., where var e = eval; e('var a = 7'); 
+  //   'a' becomes global, thus, defeating the purpose.
   function sandbox(fn) {
   
     var keys = {};
@@ -107,5 +115,4 @@
     
     return result;
   }
-  
 }());

@@ -1,6 +1,6 @@
 {
   "name": "vm-shim",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "browser shim for vm#runInContext methods",
   "homepage" : "https://github.com/dfkaye/vm-shim",
   "author": {
@@ -8,7 +8,7 @@
     "email" : "dfkaye@yahoo.com"
   },
   "devDependencies": {
-    "jasmine-node": "~1.0.0"
+    "jasmine-node": "1.x.x"
   },
   "license": "MIT",
   "main": "./vm-shim.js",
