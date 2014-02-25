@@ -1,6 +1,6 @@
 {
   "name": "vm-shim",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "browser shim for vm#runInContext methods",
   "homepage" : "https://github.com/dfkaye/vm-shim",
   "author": {
