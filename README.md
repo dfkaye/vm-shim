@@ -136,8 +136,8 @@ Using @pivotallabs'
 the browser suite.
 
 __The *jasmine2* browser test page is viewable on 
-<a href='//rawgithub.com/dfkaye/vm-shim/master/test/browser-suite.html' 
-   target='_new' title='opens in new tab or window'>rawgithub</a>.__
+<a href='//rawgit.com/dfkaye/vm-shim/master/test/browser-suite.html' 
+   target='_new' title='opens in new tab or window'>rawgit</a>.__
   
 Using Toby Ho's MAGNIFICENT [testemjs](https://github.com/airportyh/testem) to 
 drive tests in multiple browsers for jasmine-2.0.0 (see how to 
@@ -154,7 +154,7 @@ history
 Just noting for the record:
 
 + Original idea emerged late at night 17 SEPT 2013 
-+ First implemented with rawgithub approach 18 SEPT, 
++ First implemented with rawgit approach 18 SEPT, 
 + Full success including objects as properties of the context argument 19 SEPT.
 + Breaking the usual TDD procedure:
   + Started with console statements and prayer ~ removed both for real unit tests
@@ -171,5 +171,5 @@ Just noting for the record:
   - new/completed bdd specs for both vm-shim and scope mocking (temp name is 'mockScope')
 + last global leakage fixed 10 NOV
 + deleted CoffeeScript and tape tests (fun but extra work for now) 11 NOV
-+ rawgithub-viewable test page that also works with testem 12 NOV
++ rawgit-viewable test page that also works with testem 12 NOV
 + moved mock scope stuff to metafunction project 18 NOV
